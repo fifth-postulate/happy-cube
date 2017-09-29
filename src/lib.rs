@@ -9,6 +9,8 @@
 //! hcube offers both style of solvers. Furthermore, it allows one to search the
 //! space for other types puzzles.
 
+extern crate bit_field;
+
 pub mod piece;
 
 #[cfg(test)]
