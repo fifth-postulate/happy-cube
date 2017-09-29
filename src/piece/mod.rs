@@ -44,28 +44,54 @@ impl Piece {
 
     /// Return a `Piece` which is similar as this piece, but rotated 90 degrees clockwise.
     pub fn rotate_clockwise(&self) -> Piece {
-        let mut result = 0;
-        let length = result.bit_length();
-        for bit_index in 0..length {
-            let bit = self.index.get_bit(bit_index);
-            let target_index = (bit_index + 4) % length;
-            result.set_bit(target_index, bit);
-        }
-        Piece::from_index(result)
+        Piece::from_index(r1(self.index))
     }
 
     /// Return a `Piece` which is similar as this piece, but rotated 90 degrees counter-clockwise.
     pub fn rotate_counter_clockwise(&self) -> Piece {
-        let mut result = 0;
-        let length = result.bit_length();
-        for bit_index in 0..length {
-            let bit = self.index.get_bit(bit_index);
-            let target_index = (bit_index + 12) % length;
-            result.set_bit(target_index, bit);
-        }
-        Piece::from_index(result)
+        Piece::from_index(r3(self.index))
     }
 }
+
+fn r0(n: u16) -> u16 {
+    n
+}
+
+
+fn r1(n: u16) -> u16 {
+    let mut result = 0;
+    let length = result.bit_length();
+    for bit_index in 0..length {
+        let bit = n.get_bit(bit_index);
+        let target_index = (bit_index + 4) % length;
+        result.set_bit(target_index, bit);
+    }
+    result
+}
+
+fn r2(n: u16) -> u16 {
+    let mut result = 0;
+    let length = result.bit_length();
+    for bit_index in 0..length {
+        let bit = n.get_bit(bit_index);
+        let target_index = (bit_index + 8) % length;
+        result.set_bit(target_index, bit);
+    }
+    result
+}
+
+
+fn r3(n: u16) -> u16 {
+    let mut result = 0;
+    let length = result.bit_length();
+    for bit_index in 0..length {
+        let bit = n.get_bit(bit_index);
+        let target_index = (bit_index + 12) % length;
+        result.set_bit(target_index, bit);
+    }
+    result
+}
+
 
 #[cfg(test)]
 mod test {
