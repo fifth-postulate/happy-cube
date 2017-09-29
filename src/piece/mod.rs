@@ -27,6 +27,8 @@
 //! Even then, not every piece could be made into a puzzle. For example some of
 //! these piece have multiple components.
 
+use bit_field::BitField;
+
 /// A representation of a piece.
 #[derive(PartialEq, Debug)]
 pub struct Piece {
@@ -42,7 +44,14 @@ impl Piece {
 
     /// Return a `Piece` which is similar as this piece, but rotated 90 degrees clockwise.
     pub fn rotate_clockwise(&self) -> Piece {
-        Piece::from_index(0b10000)
+        let mut result = 0;
+        let length = result.bit_length();
+        for bit_index in 0..length {
+            let bit = self.index.get_bit(bit_index);
+            let target_index = (bit_index + 4) % length;
+            result.set_bit(target_index, bit);
+        }
+        Piece::from_index(result)
     }
 }
 
@@ -53,9 +62,18 @@ mod test {
     #[test]
     fn pieces_should_rotate_clockwise() {
         let start = Piece::from_index(0b10);
+        let mut transformed = start;
 
-        let transformed = start.rotate_clockwise();
+        transformed = transformed.rotate_clockwise();
+        assert_eq!(transformed, Piece::from_index(0b10_0000));
 
-        assert_eq!(transformed, Piece::from_index(0b10000))
+        transformed = transformed.rotate_clockwise();
+        assert_eq!(transformed, Piece::from_index(0b10_0000_0000));
+
+        transformed = transformed.rotate_clockwise();
+        assert_eq!(transformed, Piece::from_index(0b10_0000_0000_0000));
+
+        transformed = transformed.rotate_clockwise();
+        assert_eq!(transformed, Piece::from_index(0b10));
     }
 }
