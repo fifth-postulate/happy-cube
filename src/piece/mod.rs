@@ -27,19 +27,31 @@
 //! Even then, not every piece could be made into a puzzle. For example some of
 //! these piece have multiple components.
 
+use std::collections::HashSet;
 use bit_field::BitField;
 
 /// A representation of a piece.
 #[derive(PartialEq, Debug)]
 pub struct Piece {
     index: u16,
+    similar: HashSet<u16>,
 }
 
 impl Piece {
     /// Create a `Piece` from an index. The piece will have a corresponding
     /// sub-cube for each bit set in the `u16` index.
     pub fn from_index(index: u16) -> Piece {
-        Piece { index : index }
+        let mut similar = HashSet::new();
+        similar.insert(r0(index));
+        similar.insert(r1(index));
+        similar.insert(r2(index));
+        similar.insert(r3(index));
+        similar.insert(t(index));
+        similar.insert(r1t(index));
+        similar.insert(r2t(index));
+        similar.insert(r3t(index));
+
+        Piece { index : index, similar : similar }
     }
 
     /// Return a `Piece` which is similar as this piece, but rotated 90 degrees clockwise.
