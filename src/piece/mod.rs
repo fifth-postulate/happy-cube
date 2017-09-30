@@ -51,6 +51,11 @@ impl Piece {
     pub fn rotate_counter_clockwise(&self) -> Piece {
         Piece::from_index(r3(self.index))
     }
+
+    /// Return a `Piece` which is similar as this piece, but flipped.
+    pub fn flip(&self) -> Piece {
+        Piece::from_index(t(self.index))
+    }
 }
 
 fn r0(n: u16) -> u16 {
@@ -93,6 +98,31 @@ fn r3(n: u16) -> u16 {
 }
 
 
+fn t(n: u16) -> u16 {
+    let mut result = 0;
+    let length = result.bit_length();
+    for bit_index in 0..length {
+        let bit = n.get_bit(bit_index);
+        let target_index = (length - bit_index) % length;
+        result.set_bit(target_index, bit);
+    }
+    result
+}
+
+
+fn r1t(n: u16) -> u16 {
+    t(r1(n))
+}
+
+fn r2t(n: u16) -> u16 {
+    t(r2(n))
+}
+
+fn r3t(n: u16) -> u16 {
+    t(r3(n))
+}
+
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -132,4 +162,17 @@ mod test {
         transformed = transformed.rotate_counter_clockwise();
         assert_eq!(transformed, Piece::from_index(0b10));
     }
+
+    #[test]
+    fn pieces_should_flip_clockwise() {
+        let start = Piece::from_index(0b10);
+        let mut transformed = start;
+
+        transformed = transformed.flip();
+        assert_eq!(transformed, Piece::from_index(0b1000_0000_0000_0000));
+
+        transformed = transformed.flip();
+        assert_eq!(transformed, Piece::from_index(0b10));
+    }
+
 }
