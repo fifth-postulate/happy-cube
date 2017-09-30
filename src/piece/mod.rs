@@ -97,7 +97,6 @@ fn r3(n: u16) -> u16 {
     result
 }
 
-
 fn t(n: u16) -> u16 {
     let mut result = 0;
     let length = result.bit_length();

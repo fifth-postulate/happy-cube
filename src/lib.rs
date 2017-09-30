@@ -12,6 +12,7 @@
 extern crate bit_field;
 
 pub mod piece;
+pub mod enumeration;
 
 #[cfg(test)]
 mod tests {
